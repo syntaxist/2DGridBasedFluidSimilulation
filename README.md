@@ -9,6 +9,8 @@ A simple way to animate visually accurate fuild dynamics. Based on grid, no part
 
 Simply include SFML files and library, copy the source code to local. and then build.
 
+Left Mouse Key to add density and velocity.
+
 ## Reference
 
 "Real-Time Fluid Dynamics for Games" by Joe Stam
