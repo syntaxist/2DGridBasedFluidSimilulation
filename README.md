@@ -12,4 +12,5 @@ Simply include SFML files and library, copy the source code to local. and then b
 ## Reference
 
 Great work "Real-Time Fluid Dynamics for Games" by Joe Stam
+
 http://graphics.cs.cmu.edu/nsp/course/15-464/Fall09/papers/StamFluidforGames.pdf
