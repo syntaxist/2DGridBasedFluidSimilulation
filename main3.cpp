@@ -64,48 +64,6 @@ void set_bnd(int b, float x[]) {
     x[IX(N - 1, N - 1)] = 0.5f * (x[IX(N - 2, N - 1)] + x[IX(N - 1, N - 2)]);
 }
 
-
-//void renderD() {
-//    colorMode(HSB, 255);
-//
-//    for (int i = 0; i < N; i++) {
-//        for (int j = 0; j < N; j++) {
-//            float x = i * SCALE;
-//            float y = j * SCALE;
-//            float d = density[IX(i, j)];
-//            fill((d + 50) % 255, 200, d);
-//            noStroke();
-//            square(x, y, SCALE);
-//        }
-//    }
-//}
-//
-//void renderV() {
-//
-//    for (int i = 0; i < N; i++) {
-//        for (int j = 0; j < N; j++) {
-//            float x = i * SCALE;
-//            float y = j * SCALE;
-//            float vx = Vx[IX(i, j)];
-//            float vy = Vy[IX(i, j)];
-//            stroke(255);
-//
-//            if (!(abs(vx) < 0.1 && abs(vy) <= 0.1)) {
-//                line(x, y, x + vx * SCALE, y + vy * SCALE);
-//            }
-//        }
-//    }
-//}
-
-    //void fadeD() {
-    //  for (int i = 0; i < density.length; i++) {
-    //    float d = density[i];
-    //    density[i] = constrain(d-0.02, 0, 255);
-    //  }
-    //}
-
-
-
 void lin_solve(int b, float x[], float x0[], float a, float c) {
     float cRecip = 1.0 / c;
     for (int k = 0; k < iter; k++) {
@@ -194,7 +152,6 @@ void advect(int b, float d[], float d0[], float velocX[], float velocY[], float 
             int j0i = int(j0);
             int j1i = int(j1);
 
-            // DOUBLE CHECK THIS!!!
             d[IX(i, j)] =
                 s0 * (t0 * d0[IX(i0i, j0i)] + t1 * d0[IX(i0i, j1i)]) +
                 s1 * (t0 * d0[IX(i1i, j0i)] + t1 * d0[IX(i1i, j1i)]);
@@ -261,13 +218,10 @@ void changeColor(sf::VertexArray& array, float theDens[]) {
 }
 
 
-
 int main() {
-    //Fluid fluid(N, 1, 0, 0.0001);
 
     sf::Clock dtClock, fpsTimer;
     sf::RenderWindow window(sf::VideoMode(resolution, resolution), "Too Slow");
-    //creating new array with 30000 triangles
     sf::VertexArray shapes = newShape(numberOfGridRow);
 
     sf::Vector2f mousePressed;
@@ -279,21 +233,13 @@ int main() {
     sf::Vector2f cMouse;
     while (window.isOpen()) {
 
-      /*  density[IX(5, 5)] = 100;
-        std::cout << density[IX(5, 5)];*/
 
 
 
         float dtFR = dtClock.restart().asSeconds();
         if (fpsTimer.getElapsedTime().asSeconds() > 1) {
             fpsTimer.restart();
-
-            //std::cout << ((1.0 / dtFR > 240) ? 240 : (1.0 / dtFR)) << std::endl;
         }
-
-        //std::cout << fluid.dens_prev[IX(10,0)] << "\n";
-        //std::cout << dtFR*1000 << "\n";
-        //event to close window on close button
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -303,11 +249,6 @@ int main() {
             {
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    //mousePressed.x = event.mouseButton.x;
-                    //mousePressed.y = event.mouseButton.y;
-                    ////std::cout << "mouse pressed x " << mousePressed.x << std::endl;
-                    ////std::cout << "mouse pressed y " << mousePressed.y << std::endl;
-                    //std::cout << "\n" << std::endl;
                     mouseLeftPressed = true;
 
                 }
@@ -316,12 +257,6 @@ int main() {
             {
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    //mouseReleased.x = event.mouseButton.x;
-                    //mouseReleased.y = event.mouseButton.y;
-                    ////std::cout << "mouse released x " << mouseReleased.x << std::endl;
-                    ////std::cout << "mouse released y " << mouseReleased.y << std::endl;
-                    //std::cout << "\n" << std::endl;
-
                     mouseLeftPressed = false;
 
                 }
@@ -337,19 +272,11 @@ int main() {
                     cMouse.x = sf::Mouse::getPosition(window).x;
                     cMouse.y = sf::Mouse::getPosition(window).y;
                     std::cout << "new mouse x: " << (cMouse.x - pMouse.x) << "," << (cMouse.y - pMouse.y) << std::endl;
-                    //addSomeSource(fluid, pMouse, cMouse);
-
-
-
 
                     addDensity(cMouse.x, cMouse.y, 100);
                     addVelocity(cMouse.x, cMouse.y, cMouse.x - pMouse.x, cMouse.y - pMouse.y);
-                    //pMouse.x = 0;
-                    //pMouse.y = 0;
-                    //cMouse.x = 0;
-                    //cMouse.y = 0;
+
                     window.clear(sf::Color(0, 0, 0));
-                    //no need for for now, as you can changeColor them all in function and draw them together
 
                     step();
                     changeColor(shapes, density);
@@ -357,8 +284,6 @@ int main() {
 
                     window.draw(shapes);
                     window.display();
-                    //std::cout << "new mouse x: " << event.mouseMove.x << std::endl;
-                    //std::cout << "new mouse y: " << event.mouseMove.y << std::endl;
 
 
                 }
@@ -366,7 +291,6 @@ int main() {
 
         }
         window.clear(sf::Color(0, 0, 0));
-        //no need for for now, as you can changeColor them all in function and draw them together
 
         step();
         changeColor(shapes, density);
