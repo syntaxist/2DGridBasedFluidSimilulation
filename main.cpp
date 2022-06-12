@@ -265,10 +265,6 @@ int main() {
             {
                 if (event.type == sf::Event::MouseMoved)
                 {
-
-                    pMouse.x = sf::Mouse::getPosition(window).x;
-                    pMouse.y = sf::Mouse::getPosition(window).y;
-                    sf::sleep(sf::seconds(dtFR));
                     cMouse.x = sf::Mouse::getPosition(window).x;
                     cMouse.y = sf::Mouse::getPosition(window).y;
                     std::cout << "new mouse x: " << (cMouse.x - pMouse.x) << "," << (cMouse.y - pMouse.y) << std::endl;
@@ -291,7 +287,8 @@ int main() {
 
         }
         window.clear(sf::Color(0, 0, 0));
-
+        pMouse.x = sf::Mouse::getPosition(window).x;
+        pMouse.y = sf::Mouse::getPosition(window).y;
         step();
         changeColor(shapes, density);
 
