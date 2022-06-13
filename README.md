@@ -5,7 +5,7 @@ Based Joe Stam's paper "Real-Time Fluid Dynamics for Games".
 
 A simple way to animate visually accurate fuild dynamics. Based on grid, no particles involved. Only works for square matrix.
 
-![](https://github.com/syntaxist/2DGridBasedFluidSimilulation/blob/main/images/FluidGif.gif)
+![](https://github.com/syntaxist/2DGridBasedFluidSimilulation/blob/main/images/Fluid.gif)
 
 ## Implementation
 
