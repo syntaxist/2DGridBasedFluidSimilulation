@@ -322,6 +322,7 @@ int main() {
     sf::Vector2f mousePressed;
     sf::Vector2f mouseReleased;
     bool mouseLeftPressed = false;
+    bool velocityRendering = false;
     window.setFramerateLimit(240);
 
     sf::Vector2f pMouse;
@@ -377,6 +378,10 @@ int main() {
                         Vy0[i] = 0;
                     }
                 }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::V))
+                {
+                    velocityRendering = !velocityRendering;
+                }
             }
         }
         window.clear(sf::Color(0, 0, 0));
@@ -385,9 +390,12 @@ int main() {
         pMouse.y = sf::Mouse::getPosition(window).y; 
         step();
         changeColor(shapes, density);
-        ChangeVectorAngle(vectorLine, Vx, Vy, density);
         window.draw(shapes);
-        window.draw(vectorLine);
+        if (velocityRendering)
+        {
+            ChangeVectorAngle(vectorLine, Vx, Vy, density);
+            window.draw(vectorLine);
+        }
         window.display(); 
     }
 }
