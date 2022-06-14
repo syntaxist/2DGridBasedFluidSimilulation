@@ -14,6 +14,7 @@ Simply include SFML files and library, copy the source code to local. and then b
 Left Mouse Key to add density and velocity.
 
 "V" key to enable and disable velocity rendering.
+
 "D" key to enable and disable density rendering.
 
 ## Reference
