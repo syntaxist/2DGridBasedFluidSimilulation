@@ -1,6 +1,5 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "profiler.h"
 #include <math.h>
 #include <cmath>
 
@@ -26,40 +25,13 @@ float Vx0[n];
 float Vy0[n];
 
 double lastAngleData[n];
-class Timer
-{
-public:
-    Timer(std::string funcN) 
-    {
-        funcName = funcN;
-        StartTimePoint = std::chrono::high_resolution_clock::now();
-    };
-    ~Timer() 
-    {
-        Stop();
-    };
-    void Stop() 
-    {
-        auto endTimePoint = std::chrono::high_resolution_clock::now();
-
-        auto start = std::chrono::time_point_cast<std::chrono::microseconds>(StartTimePoint).time_since_epoch().count();
-        auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimePoint).time_since_epoch().count();
-
-        auto duration = end - start;
-        double ms = duration * 0.001;
-        
-        std::cout << funcName << ":" << duration << "us (" << ms << "ms)\n";
-    }
-private:
-    std::chrono::time_point<std::chrono::high_resolution_clock> StartTimePoint;
-    std::string funcName;
-};
 
 int IX(int x, int y) {
     if (x >= 0 && x <= N - 1 && y >= 0 && y <= N - 1)
     {
         return x + (y * N);
     }
+
 }
 
 void addDensity(int x, int y, float amount) {
@@ -138,6 +110,7 @@ void project(float velocX[], float velocY[], float p[], float div[]) {
     set_bnd(1, velocX);
     set_bnd(2, velocY);
 }
+
 
 void advect(int b, float d[], float d0[], float velocX[], float velocY[], float dt) {
     float i0, i1, j0, j1;
@@ -228,8 +201,8 @@ sf::VertexArray newVectorFIeld(int numberOfQuads)
     {
         for (size_t i = 0; i < numberOfQuads; i++)
         {
-            sf::Vertex v1(sf::Vector2f(i * cellSize + cellSize / 2, j * cellSize));
-            sf::Vertex v2(sf::Vector2f(v1.position.x , v1.position.y + cellSize));
+            sf::Vertex v1(sf::Vector2f(i * cellSize , j * cellSize + cellSize / 2));
+            sf::Vertex v2(sf::Vector2f(v1.position.x + cellSize, v1.position.y ));
             sf::Transform transformData;
             transformData.rotate(0, i * cellSize + cellSize / 2, j * cellSize + cellSize / 2);
             v1.position = transformData.transformPoint(v1.position);
@@ -243,6 +216,7 @@ sf::VertexArray newVectorFIeld(int numberOfQuads)
     }
     return vectorLine;
 }
+
 
 void changeColor(sf::VertexArray& array, float theDens[]) {
     float cellColor;
@@ -269,7 +243,6 @@ void changeColor(sf::VertexArray& array, float theDens[]) {
         }
     }
 }
-
 void ChangeVectorAngle(sf::VertexArray& array, float Vx[], float Vy[], float theDens[])
 {
     double angle;
@@ -290,13 +263,15 @@ void ChangeVectorAngle(sf::VertexArray& array, float Vx[], float Vy[], float the
             double angleInRadians = std::atan2(YAxis, xAxis);
             double angleInDegrees = (angleInRadians / ConstPi) * 180.0;
             angleTurningDataTemp = fmod(angleInDegrees + 360, 360);
-            angleTurningData = angleInDegrees - lastAngleData[IX(i, j)];
+            angleTurningData = lastAngleData[IX(i, j)] - angleTurningDataTemp;
             transformData.rotate(-angleTurningData, i * cellSize + cellSize / 2, j * cellSize + cellSize / 2);
             lastAngleData[IX(i, j)] = angleTurningDataTemp;
             int index = IX(i, j);
             index = index * 2;
             array[index].position = transformData.transformPoint(array[index].position);
             array[index + 1].position = transformData.transformPoint(array[index + 1].position);
+  /*          array[index].color =
+                array[index + 1].color = sf::Color(255, 0, 0, theDens[IX(i, j)]*100);*/
         }
     }
 }
@@ -318,11 +293,11 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(resolution, resolution), "Fluid");
     sf::VertexArray shapes = newShape(numberOfGridRow);
     sf::VertexArray vectorLine = newVectorFIeld(numberOfGridRow);
-
     sf::Vector2f mousePressed;
     sf::Vector2f mouseReleased;
     bool mouseLeftPressed = false;
     bool velocityRendering = false;
+    bool densityRendering = true;
     window.setFramerateLimit(240);
 
     sf::Vector2f pMouse;
@@ -382,20 +357,28 @@ int main() {
                 {
                     velocityRendering = !velocityRendering;
                 }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                {
+                    densityRendering = !densityRendering;
+                }
             }
         }
         window.clear(sf::Color(0, 0, 0));
         //ContinousAdding(density);
         pMouse.x = sf::Mouse::getPosition(window).x;
-        pMouse.y = sf::Mouse::getPosition(window).y; 
+        pMouse.y = sf::Mouse::getPosition(window).y;
+        //system("cls");
         step();
-        changeColor(shapes, density);
-        window.draw(shapes);
+        if (densityRendering)
+        {
+            changeColor(shapes, density);
+            window.draw(shapes);
+        }
         if (velocityRendering)
         {
             ChangeVectorAngle(vectorLine, Vx, Vy, density);
             window.draw(vectorLine);
         }
-        window.display(); 
+        window.display();
     }
 }
