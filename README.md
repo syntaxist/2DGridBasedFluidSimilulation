@@ -1,5 +1,5 @@
 # 2D Grid Based Fluid Simulation
-Based on Joe Stam's paper "Real-Time Fluid Dynamics for Games".
+Based on Jos Stam's paper "Real-Time Fluid Dynamics for Games".
 
 ## Description
 
@@ -19,6 +19,6 @@ Left Mouse Key to add density and velocity.
 
 ## Reference
 
-"Real-Time Fluid Dynamics for Games" by Joe Stam
+"Real-Time Fluid Dynamics for Games" by Jos Stam
 
 http://graphics.cs.cmu.edu/nsp/course/15-464/Fall09/papers/StamFluidforGames.pdf
