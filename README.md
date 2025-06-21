@@ -1,4 +1,4 @@
-# 2D Grid Based Fluid Similulation
+# 2D Grid Based Fluid Simulation
 Based on Joe Stam's paper "Real-Time Fluid Dynamics for Games".
 
 ## Description
